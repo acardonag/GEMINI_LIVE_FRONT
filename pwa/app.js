@@ -11,6 +11,7 @@ let isStopping = false;
 let isModelSpeaking = false;
 const OUTPUT_SAMPLE_RATE = 24000;
 const BACKEND_BASE_URL = 'https://gemini-live-backend-1003987130329.us-central1.run.app';
+const INPUT_SAMPLE_RATE = 16000;
 
 const startBtn = document.getElementById('start-btn');
 const stopBtn = document.getElementById('stop-btn');
@@ -42,9 +43,21 @@ async function startConversation() {
         console.log('[ws] open');
         log("¡Conectao pues! Empezamos la venta...");
         statusText.textContent = "🎙️ Paisa conectado";
+
+        ws.send(JSON.stringify({
+            type: 'session_start',
+            inputSampleRate: INPUT_SAMPLE_RATE,
+            outputSampleRate: OUTPUT_SAMPLE_RATE,
+            inputFormat: 'pcm16',
+            outputFormat: 'pcm16',
+            language: 'es-CO'
+        }));
         
         // 2. Client-side audio logic
-        audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
+        audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: INPUT_SAMPLE_RATE });
+        if (audioContext.state === 'suspended') {
+            await audioContext.resume();
+        }
 
         // Input: Get Mic Stream
         mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
