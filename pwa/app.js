@@ -10,6 +10,7 @@ let isPlaying = false;
 let isStopping = false;
 let isModelSpeaking = false;
 const OUTPUT_SAMPLE_RATE = 24000;
+const BACKEND_BASE_URL = 'https://gemini-live-backend-1003987130329.us-central1.run.app';
 
 const startBtn = document.getElementById('start-btn');
 const stopBtn = document.getElementById('stop-btn');
@@ -33,7 +34,7 @@ async function startConversation() {
     statusIndicator.classList.add('on');
     
     // 1. WebSocket connection to FastAPI backend
-    ws = new WebSocket('ws://' + window.location.hostname + ':8000/ws/live');
+    ws = new WebSocket(`${BACKEND_BASE_URL.replace(/^http/, 'ws')}/ws/live`);
     ws.binaryType = 'arraybuffer';
     console.log('[ws] creating socket to', ws.url);
 
