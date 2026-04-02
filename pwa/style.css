@@ -1,0 +1,107 @@
+body {
+    font-family: 'Open Sans', system-ui, -apple-system, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f7e9d7; /* Soft Colombian coffee vibes */
+    color: #4a342e;
+}
+
+.container {
+    text-align: center;
+    padding: 3rem;
+    border-radius: 20px;
+    background-color: #fffaf0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 500px;
+}
+
+h1 {
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+p {
+    margin-bottom: 2rem;
+    font-style: italic;
+    color: #6d4c41;
+}
+
+.voice-controls {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.btn {
+    padding: 0.8rem 1.8rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.start {
+    background-color: #4caf50;
+    color: white;
+}
+
+.start:hover:not(:disabled) {
+    background-color: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(76, 175, 80, 0.2);
+}
+
+.stop {
+    background-color: #f44336;
+    color: white;
+}
+
+.stop:hover:not(:disabled) {
+    background-color: #e53935;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(244, 67, 54, 0.2);
+}
+
+.btn:disabled {
+    background-color: #ccc;
+    cursor: default;
+    box-shadow: none;
+    transform: none;
+}
+
+.status-indicator {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    background-color: #eee;
+    color: #666;
+}
+
+.status-indicator.on {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
+}
+
+.chat-area {
+    text-align: left;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 0.9rem;
+    color: #666;
+}
