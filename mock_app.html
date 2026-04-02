@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mock App BBVA – Aprobación</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0a1628;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      background: #0d2040;
+      border: 1px solid #1a3a6a;
+      border-radius: 20px;
+      padding: 36px 32px;
+      width: 360px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    }
+
+    .bbva-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .bbva-logo .dot {
+      width: 18px; height: 18px;
+      background: #004990;
+      border-radius: 50%;
+    }
+
+    .bbva-logo .dot.active { background: #0066ff; }
+
+    .bbva-logo span {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #4ba3ff;
+    }
+
+    h2 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #a0bedd;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .notif-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 24px;
+      line-height: 1.3;
+    }
+
+    label {
+      font-size: 13px;
+      color: #7a9ec0;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #1a3a6a;
+      background: #091629;
+      color: #ffffff;
+      font-size: 16px;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      outline: none;
+    }
+
+    input[type="text"]:focus { border-color: #0066ff; }
+
+    .input-hint {
+      font-size: 12px;
+      color: #4a6a90;
+      margin-bottom: 28px;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      flex: 1;
+      padding: 14px 10px;
+      border-radius: 12px;
+      border: none;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.1s, opacity 0.1s;
+    }
+
+    button:active { transform: scale(0.97); opacity: 0.85; }
+    button:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+    .btn-approve {
+      background: linear-gradient(135deg, #00875a, #00c47a);
+      color: #ffffff;
+    }
+
+    .btn-reject {
+      background: linear-gradient(135deg, #c0392b, #e74c3c);
+      color: #ffffff;
+    }
+
+    .status-box {
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #091629;
+      border: 1px solid #1a3a6a;
+      transition: all 0.3s;
+    }
+
+    .status-box.success { border-color: #00c47a; background: #052010; color: #00e080; }
+    .status-box.error   { border-color: #e74c3c; background: #200505; color: #ff6b6b; }
+    .status-box.pending { border-color: #0066ff; background: #050d20; color: #4ba3ff; }
+
+    .status-box .icon { font-size: 20px; flex-shrink: 0; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #1a3a6a;
+      margin: 24px 0 16px;
+    }
+
+    .footer-note {
+      font-size: 12px;
+      color: #3a5a80;
+      text-align: center;
+    }
+
+    .pulse {
+      animation: pulse 1.6s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="bbva-logo">
+      <div class="dot"></div>
+      <div class="dot active"></div>
+      <span>BBVA</span>
+    </div>
+
+    <h2>Solicitud de autenticación</h2>
+    <p class="notif-title">El Paisa está esperando tu confirmación para continuar la venta</p>
+
+    <label for="cedula">Cédula del cliente</label>
+    <input type="text" id="cedula" placeholder="Ej: 1053798698" maxlength="12" />
+    <p class="input-hint">Debe coincidir con la cédula que le diste al Paisa</p>
+
+    <div class="btn-row">
+      <button class="btn-approve" id="btnAprobar" onclick="sendResult('APROBADO')">
+        ✅ Aprobar
+      </button>
+      <button class="btn-reject" id="btnRechazar" onclick="sendResult('RECHAZADO')">
+        ❌ Rechazar
+      </button>
+    </div>
+
+    <div class="status-box pending" id="statusBox">
+      <span class="icon">⏳</span>
+      <span id="statusText">Esperando tu acción…</span>
+    </div>
+
+    <hr class="divider" />
+    <p class="footer-note">Mock local · apunta a <code>localhost:8000</code></p>
+  </div>
+
+  <script>
+    const BACKEND = 'http://localhost:8000';
+
+    // Pre-fill cédula from URL param si viene ?cedula=xxx
+    const params = new URLSearchParams(location.search);
+    if (params.get('cedula')) {
+      document.getElementById('cedula').value = params.get('cedula');
+    }
+
+    async function sendResult(status) {
+      const cedula = document.getElementById('cedula').value.replace(/\D/g, '');
+      if (!cedula || cedula.length < 6) {
+        showStatus('error', '⚠️', 'Ingresa una cédula válida antes de continuar.');
+        return;
+      }
+
+      const btnAprobar = document.getElementById('btnAprobar');
+      const btnRechazar = document.getElementById('btnRechazar');
+      btnAprobar.disabled = true;
+      btnRechazar.disabled = true;
+      showStatus('pending', '<span class="pulse">🔄</span>', 'Enviando señal al Paisa…');
+
+      try {
+        const resp = await fetch(`${BACKEND}/mock-auth-result`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cedula, status, userName: 'Cliente' }),
+        });
+
+        if (!resp.ok) {
+          throw new Error(`HTTP ${resp.status}`);
+        }
+
+        const data = await resp.json();
+
+        if (status === 'APROBADO') {
+          showStatus(
+            'success',
+            '✅',
+            `¡Aprobación enviada! El Paisa debería saludarte en los próximos segundos.\n(cédula: ${data.cedula})`
+          );
+        } else {
+          showStatus('error', '❌', `Rechazo enviado. El Paisa fue notificado del rechazo.`);
+        }
+      } catch (err) {
+        showStatus('error', '🚫', `No se pudo conectar al backend: ${err.message}\n¿Está corriendo en localhost:8000?`);
+        btnAprobar.disabled = false;
+        btnRechazar.disabled = false;
+      }
+    }
+
+    function showStatus(type, icon, text) {
+      const box = document.getElementById('statusBox');
+      const textEl = document.getElementById('statusText');
+      box.className = `status-box ${type}`;
+      box.querySelector('.icon').innerHTML = icon;
+      textEl.textContent = text;
+    }
+  </script>
+</body>
+</html>

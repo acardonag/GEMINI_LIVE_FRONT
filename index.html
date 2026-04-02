@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Chat: Vendedor Paisa</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🗣️ ¡Vea pues mi querido!</h1>
+        <p>Hable con el mejor vendedor de Antioquia.</p>
+        
+        <div class="status-indicator" id="status-indicator">
+            <span id="status-text">Desconectado</span>
+        </div>
+
+        <div class="voice-controls">
+            <button id="start-btn" class="btn start">¡Arrancar pues!</button>
+            <button id="stop-btn" class="btn stop" disabled>Parar mijo</button>
+        </div>
+
+        <div class="chat-area" id="log">
+            <!-- Transcriptions could go here -->
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
