@@ -195,11 +195,11 @@
     </div>
 
     <hr class="divider" />
-    <p class="footer-note">Mock local · apunta a <code>localhost:8000</code></p>
+    <p class="footer-note">Conectado a Cloud Run · backend público</p>
   </div>
 
   <script>
-    const BACKEND = 'http://localhost:8000';
+    const BACKEND = 'https://gemini-live-backend-1003987130329.us-central1.run.app';
 
     // Pre-fill cédula from URL param si viene ?cedula=xxx
     const params = new URLSearchParams(location.search);
@@ -221,7 +221,7 @@
       showStatus('pending', '<span class="pulse">🔄</span>', 'Enviando señal al Paisa…');
 
       try {
-        const resp = await fetch(`${BACKEND}/mock-auth-result`, {
+        const resp = await fetch(`${BACKEND}/auth-result`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ cedula, status, userName: 'Cliente' }),
@@ -243,7 +243,7 @@
           showStatus('error', '❌', `Rechazo enviado. El Paisa fue notificado del rechazo.`);
         }
       } catch (err) {
-        showStatus('error', '🚫', `No se pudo conectar al backend: ${err.message}\n¿Está corriendo en localhost:8000?`);
+        showStatus('error', '🚫', `No se pudo conectar al backend: ${err.message}\nRevisa la URL pública de Cloud Run.`);
         btnAprobar.disabled = false;
         btnRechazar.disabled = false;
       }
