@@ -1,30 +1,110 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice Chat: Vendedor Paisa</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voice Chat: Vendedor Paisa</title>
+  <meta name="theme-color" content="#004481">
+  <meta name="description" content="Tu vendedor paisa virtual, siempre listo para ayudarte a comprar.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.png">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    let deferredPrompt = null;
+
+    function isStandaloneMode() {
+      return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    }
+
+    function registerServiceWorker() {
+      if (!('serviceWorker' in navigator)) return;
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch((error) => {
+          console.warn('No se pudo registrar el service worker:', error);
+        });
+      });
+    }
+
+    function setupInstallPrompt() {
+      const installBtn = document.getElementById('install-btn');
+      const installHint = document.getElementById('install-hint');
+
+      window.addEventListener('beforeinstallprompt', (event) => {
+        event.preventDefault();
+        deferredPrompt = event;
+        if (installBtn) installBtn.hidden = false;
+        if (installHint) {
+          installHint.textContent = 'Tu navegador ya permite instalar la app.';
+        }
+      });
+
+      window.addEventListener('appinstalled', () => {
+        deferredPrompt = null;
+        if (installBtn) installBtn.hidden = true;
+        if (installHint) {
+          installHint.textContent = 'La app ya quedó instalada.';
+        }
+      });
+
+      if (!isStandaloneMode()) {
+        if (installHint) {
+          installHint.textContent = 'Si no ves el botón, usa el menú del navegador y elige "Instalar app" o "Agregar a pantalla de inicio".';
+        }
+      } else if (installHint) {
+        installHint.textContent = 'Ya estás usando la app instalada.';
+        if (installBtn) installBtn.hidden = true;
+      }
+
+      if (installBtn) {
+        installBtn.addEventListener('click', async () => {
+          if (!deferredPrompt) {
+            if (installHint) {
+              installHint.textContent = 'Si tu navegador no muestra el botón, abre el menú y busca "Instalar app".';
+            }
+            return;
+          }
+
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          deferredPrompt = null;
+          installBtn.hidden = true;
+          if (installHint) {
+            installHint.textContent = outcome === 'accepted'
+              ? 'Instalación confirmada. Ya casi queda lista.'
+              : 'Instalación cancelada. Puedes intentarlo otra vez.';
+          }
+        });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      registerServiceWorker();
+      setupInstallPrompt();
+    });
+  </script>
 </head>
 <body>
-    <div class="container">
-        <h1>🗣️ ¡Vea pues mi querido!</h1>
-        <p>Hable con el mejor vendedor de Antioquia.</p>
-        
-        <div class="status-indicator" id="status-indicator">
-            <span id="status-text">Desconectado</span>
-        </div>
+  <div class="container">
+    <h1>🗣️ ¡Vea pues mi querido!</h1>
+    <p>Hable con el mejor vendedor de Antioquia.</p>
 
-        <div class="voice-controls">
-            <button id="start-btn" class="btn start">¡Arrancar pues!</button>
-            <button id="stop-btn" class="btn stop" disabled>Parar mijo</button>
-        </div>
-
-        <div class="chat-area" id="log">
-            <!-- Transcriptions could go here -->
-        </div>
+    <div class="status-indicator" id="status-indicator">
+      <span id="status-text">Desconectado</span>
     </div>
 
-    <script src="app.js"></script>
+    <div class="voice-controls">
+      <button id="start-btn" class="btn start">¡Arrancar pues!</button>
+      <button id="stop-btn" class="btn stop" disabled>Parar mijo</button>
+    </div>
+
+    <p class="install-hint" id="install-hint"></p>
+    <button id="install-btn" class="btn install" hidden>🏠 ¡Instálame en tu celular!</button>
+
+    <div class="chat-area" id="log">
+      <!-- Transcriptions could go here -->
+    </div>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>

@@ -35,6 +35,7 @@ p {
     gap: 1.5rem;
     justify-content: center;
     margin-bottom: 2rem;
+    flex-wrap: wrap;
 }
 
 .btn {
@@ -62,6 +63,13 @@ p {
 .stop {
     background-color: #f44336;
     color: white;
+}
+
+.install {
+    background-color: #fb8c00;
+    color: white;
+    width: 100%;
+    margin-top: 0.25rem;
 }
 
 .stop:hover:not(:disabled) {
@@ -104,4 +112,12 @@ p {
     border: 1px solid #ddd;
     font-size: 0.9rem;
     color: #666;
+}
+
+.install-hint {
+    margin: 0 0 1rem;
+    color: #6d4c41;
+    font-style: normal;
+    font-size: 0.95rem;
+    line-height: 1.4;
 }
