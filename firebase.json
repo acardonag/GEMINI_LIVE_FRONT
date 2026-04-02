@@ -1,0 +1,16 @@
+{
+  "hosting": {
+    "site": "bbva-compras",
+    "public": "pwa",
+    "ignore": [
+      "firebase.json",
+      ".firebaserc",
+      "node_modules",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      { "source": "**", "destination": "/index.html" }
+    ]
+  }
+}
