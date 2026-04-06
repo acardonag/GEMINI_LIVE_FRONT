@@ -1,0 +1,8 @@
+# Secrets
+secret_key.md
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
